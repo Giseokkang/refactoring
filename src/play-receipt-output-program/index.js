@@ -3,10 +3,11 @@ import INVOICE from "./invoices.json";
 import PLAYS from "./plays.json";
 
 const statement = (invoice, plays) => {
-  return renderPlainText(invoice, plays);
+  const statementData = {};
+  return renderPlainText(statementData, invoice, plays);
 };
 
-const renderPlainText = (invoice, plays) => {
+const renderPlainText = (data, invoice, plays) => {
   const usd = (aNumber) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
