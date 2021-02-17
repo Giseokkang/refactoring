@@ -64,10 +64,8 @@ function statement(invoice, plays) {
     return volumeCredits;
   };
 
-  let volumeCredits = totalVolumneCredits();
-
   result += `총액: ${usd(totalAmount / 100)}\n`;
-  result += `적립 포인트: ${volumeCredits}점\n`;
+  result += `적립 포인트: ${totalVolumneCredits()}점\n`;
   return result;
 }
 
