@@ -4,10 +4,12 @@ import PLAYS from "./plays.json";
 
 const statement = (invoice, plays) => {
   const statementData = {};
-  return renderPlainText(statementData, invoice, plays);
+  statementData.customer = invoice.customer;
+  statementData.performances = invoice.performances;
+  return renderPlainText(statementData, plays);
 };
 
-const renderPlainText = (data, invoice, plays) => {
+const renderPlainText = (data, plays) => {
   const usd = (aNumber) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -52,7 +54,7 @@ const renderPlainText = (data, invoice, plays) => {
 
   const totalAmount = () => {
     let result = 0;
-    for (let perf of invoice.performances) {
+    for (let perf of data.performances) {
       result += amountFor(perf);
     }
     return result;
@@ -60,15 +62,15 @@ const renderPlainText = (data, invoice, plays) => {
 
   const totalVolumneCredits = () => {
     let volumeCredits = 0;
-    for (let perf of invoice.performances) {
+    for (let perf of data.performances) {
       volumeCredits += volumeCreaditsFor(perf);
     }
 
     return volumeCredits;
   };
 
-  let result = `청구 내역(고객명: ${invoice.customer})\n`;
-  for (let perf of invoice.performances) {
+  let result = `청구 내역(고객명: ${data.customer})\n`;
+  for (let perf of data.performances) {
     // 청구 내역을 출력한다.
     result += `${playFor(perf).name}: ${usd(amountFor(perf) / 100)} (${
       perf.audience
