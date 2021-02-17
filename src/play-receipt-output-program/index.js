@@ -7,27 +7,6 @@ const statement = (invoice, plays) => {
     return plays[aPerformance.playID]; // object {name, type}
   };
 
-  const enrichPerformance = (aPerformance) => {
-    const result = Object.assign({}, aPerformance);
-    result.play = playFor(aPerformance);
-    return result;
-  };
-
-  const statementData = {};
-  statementData.customer = invoice.customer;
-  statementData.performances = invoice.performances.map(enrichPerformance);
-  return renderPlainText(statementData);
-};
-
-const renderPlainText = (data) => {
-  const usd = (aNumber) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 2,
-    }).format(aNumber);
-  };
-
   const amountFor = (aPerformance) => {
     let result = 0;
     switch (aPerformance.play.type) {
@@ -49,6 +28,29 @@ const renderPlainText = (data) => {
     return result;
   };
 
+  const enrichPerformance = (aPerformance) => {
+    const result = Object.assign({}, aPerformance);
+    result.play = playFor(result);
+    result.amount = amountFor(result);
+    return result;
+  };
+
+  const statementData = {};
+  statementData.customer = invoice.customer;
+  statementData.performances = invoice.performances.map(enrichPerformance);
+  console.log("statementData", statementData);
+  return renderPlainText(statementData);
+};
+
+const renderPlainText = (data) => {
+  const usd = (aNumber) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 2,
+    }).format(aNumber);
+  };
+
   const volumeCreaditsFor = (aPerformance) => {
     let result = 0;
     result += Math.max(aPerformance.audience - 30, 0);
@@ -61,7 +63,7 @@ const renderPlainText = (data) => {
   const totalAmount = () => {
     let result = 0;
     for (let perf of data.performances) {
-      result += amountFor(perf);
+      result += perf.play.amount;
     }
     return result;
   };
@@ -78,7 +80,7 @@ const renderPlainText = (data) => {
   let result = `청구 내역(고객명: ${data.customer})\n`;
   for (let perf of data.performances) {
     // 청구 내역을 출력한다.
-    result += `${perf.play.name}: ${usd(amountFor(perf) / 100)} (${
+    result += `${perf.play.name}: ${usd(perf.play.amount / 100)} (${
       perf.audience
     }석)\n`;
   }
