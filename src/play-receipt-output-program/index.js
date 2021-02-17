@@ -2,7 +2,6 @@ import INVOICE from "./invoices.json";
 import PLAYS from "./plays.json";
 
 function statement(invoice, plays) {
-  let totalAmount = 0;
   let result = `청구 내역(고객명: ${invoice.customer})\n`;
 
   const usd = (aNumber) => {
@@ -54,6 +53,7 @@ function statement(invoice, plays) {
     }석)\n`;
   }
 
+  let totalAmount = 0;
   for (let perf of invoice.performances) {
     totalAmount += amountFor(perf);
   }
