@@ -6,7 +6,7 @@ function statement(invoice, plays) {
   let volumeCredits = 0;
   let result = `청구 내역(고객명: ${invoice.customer})\n`;
 
-  const formatAsUSD = (aNumber) => {
+  const usd = (aNumber) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
@@ -51,12 +51,12 @@ function statement(invoice, plays) {
   for (let perf of invoice.performances) {
     volumeCredits += volumeCreaditsFor(perf);
     // 청구 내역을 출력한다.
-    result += `${playFor(perf).name}: ${formatAsUSD(amountFor(perf) / 100)} (${
+    result += `${playFor(perf).name}: ${usd(amountFor(perf) / 100)} (${
       perf.audience
     }석)\n`;
     totalAmount += amountFor(perf);
   }
-  result += `총액: ${formatAsUSD(totalAmount / 100)}\n`;
+  result += `총액: ${usd(totalAmount / 100)}\n`;
   result += `적립 포인트: ${volumeCredits}점\n`;
   return result;
 }
