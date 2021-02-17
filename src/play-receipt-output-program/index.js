@@ -70,9 +70,7 @@ function statement(invoice, plays) {
     return volumeCredits;
   };
 
-  let totalAmount = appleSauce();
-
-  result += `총액: ${usd(totalAmount / 100)}\n`;
+  result += `총액: ${usd(appleSauce() / 100)}\n`;
   result += `적립 포인트: ${totalVolumneCredits()}점\n`;
   return result;
 }
