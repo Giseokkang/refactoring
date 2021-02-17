@@ -28,10 +28,20 @@ const statement = (invoice, plays) => {
     return result;
   };
 
+  const volumeCreditsFor = (aPerformance) => {
+    let result = 0;
+    result += Math.max(aPerformance.audience - 30, 0);
+    if ("comedy" === aPerformance.play.type)
+      result += Math.floor(aPerformance.audience / 5);
+
+    return result;
+  };
+
   const enrichPerformance = (aPerformance) => {
     const result = Object.assign({}, aPerformance);
     result.play = playFor(result);
     result.amount = amountFor(result);
+    result.volumeCredits = volumeCreditsFor(result);
     return result;
   };
 
@@ -51,15 +61,6 @@ const renderPlainText = (data) => {
     }).format(aNumber);
   };
 
-  const volumeCreaditsFor = (aPerformance) => {
-    let result = 0;
-    result += Math.max(aPerformance.audience - 30, 0);
-    if ("comedy" === aPerformance.play.type)
-      result += Math.floor(aPerformance.audience / 5);
-
-    return result;
-  };
-
   const totalAmount = () => {
     let result = 0;
     for (let perf of data.performances) {
@@ -71,7 +72,7 @@ const renderPlainText = (data) => {
   const totalVolumneCredits = () => {
     let volumeCredits = 0;
     for (let perf of data.performances) {
-      volumeCredits += volumeCreaditsFor(perf);
+      volumeCredits += perf.volumeCredits;
     }
 
     return volumeCredits;
@@ -80,7 +81,7 @@ const renderPlainText = (data) => {
   let result = `청구 내역(고객명: ${data.customer})\n`;
   for (let perf of data.performances) {
     // 청구 내역을 출력한다.
-    result += `${perf.play.name}: ${usd(perf.play.amount / 100)} (${
+    result += `${perf.play.name}: ${usd(perf.amount / 100)} (${
       perf.audience
     }석)\n`;
   }
