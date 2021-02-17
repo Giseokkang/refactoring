@@ -2,7 +2,11 @@
 import INVOICE from "./invoices.json";
 import PLAYS from "./plays.json";
 
-function statement(invoice, plays) {
+const statement = (invoice, plays) => {
+  return renderPlainText(invoice, plays);
+};
+
+const renderPlainText = (invoice, plays) => {
   const usd = (aNumber) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -73,7 +77,7 @@ function statement(invoice, plays) {
   result += `총액: ${usd(totalAmount() / 100)}\n`;
   result += `적립 포인트: ${totalVolumneCredits()}점\n`;
   return result;
-}
+};
 
 const Receipt = () => {
   const result = statement(INVOICE[0], PLAYS);
