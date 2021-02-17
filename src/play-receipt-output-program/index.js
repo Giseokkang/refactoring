@@ -53,10 +53,13 @@ function statement(invoice, plays) {
     }석)\n`;
   }
 
-  let totalAmount = 0;
-  for (let perf of invoice.performances) {
-    totalAmount += amountFor(perf);
-  }
+  const appleSauce = () => {
+    let result = 0;
+    for (let perf of invoice.performances) {
+      result += amountFor(perf);
+    }
+    return result;
+  };
 
   const totalVolumneCredits = () => {
     let volumeCredits = 0;
@@ -66,6 +69,8 @@ function statement(invoice, plays) {
 
     return volumeCredits;
   };
+
+  let totalAmount = appleSauce();
 
   result += `총액: ${usd(totalAmount / 100)}\n`;
   result += `적립 포인트: ${totalVolumneCredits()}점\n`;
