@@ -11,8 +11,13 @@ function statement(invoice, plays) {
     minimumFractionDigits: 2,
   }).format;
 
-  const amountFor = (aPerformance, play) => {
+  const playFor = (aPerformance) => {
+    return plays[aPerformance.playID]; // object {name, type}
+  };
+
+  const amountFor = (aPerformance) => {
     let result = 0;
+    const play = playFor(aPerformance);
     switch (play.type) {
       case "tragedy": //비극
         result = 40000;
@@ -33,8 +38,8 @@ function statement(invoice, plays) {
   };
 
   for (let perf of invoice.performances) {
-    const play = plays[perf.playID]; // object {name, type}
-    let thisAmount = amountFor(perf, play);
+    let play = playFor(perf);
+    let thisAmount = amountFor(perf);
 
     // 포인트를 적립한다.
     volumeCredits += Math.max(perf.audience - 30, 0);
