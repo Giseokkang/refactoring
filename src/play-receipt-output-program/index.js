@@ -1,9 +1,8 @@
+/* eslint-disable no-use-before-define */
 import INVOICE from "./invoices.json";
 import PLAYS from "./plays.json";
 
 function statement(invoice, plays) {
-  let result = `청구 내역(고객명: ${invoice.customer})\n`;
-
   const usd = (aNumber) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -46,13 +45,6 @@ function statement(invoice, plays) {
     return result;
   };
 
-  for (let perf of invoice.performances) {
-    // 청구 내역을 출력한다.
-    result += `${playFor(perf).name}: ${usd(amountFor(perf) / 100)} (${
-      perf.audience
-    }석)\n`;
-  }
-
   const totalAmount = () => {
     let result = 0;
     for (let perf of invoice.performances) {
@@ -69,6 +61,14 @@ function statement(invoice, plays) {
 
     return volumeCredits;
   };
+
+  let result = `청구 내역(고객명: ${invoice.customer})\n`;
+  for (let perf of invoice.performances) {
+    // 청구 내역을 출력한다.
+    result += `${playFor(perf).name}: ${usd(amountFor(perf) / 100)} (${
+      perf.audience
+    }석)\n`;
+  }
 
   result += `총액: ${usd(totalAmount() / 100)}\n`;
   result += `적립 포인트: ${totalVolumneCredits()}점\n`;
